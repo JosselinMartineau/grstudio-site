@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRStudio — Панель управления</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101010;color:#f5f5f5;font:16px Arial,sans-serif}
+main{width:min(900px,94%);margin:35px auto}
+h1{letter-spacing:2px}
+h2{margin-top:0}
+.card{background:#1b1b1b;border:1px solid #333;border-radius:14px;padding:22px;margin:20px 0}
+input,textarea,select{display:block;width:100%;margin:10px 0 16px;padding:13px;border:1px solid #444;border-radius:8px;background:#111;color:white;font:inherit}
+textarea{min-height:180px;resize:vertical}
+button{border:0;border-radius:8px;padding:12px 18px;background:#d7b56d;color:#111;font-weight:bold;cursor:pointer;margin:4px}
+button.secondary{background:#383838;color:white}
+button.danger{background:#9e3434;color:white}
+small,.muted{color:#aaa}
+.hidden{display:none!important}
+.project{padding:15px 0;border-top:1px solid #393939}
+#message{padding:12px;color:#d7b56d;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<main>
+  <h1>GRStudio <small> / ADMIN</small></h1>
+  <p class="muted">Панель управления сайтом</p>
+  <div id="message"></div>
+
+  <section id="loginBox" class="card">
+    <h2>Вход администратора</h2>
+    <form id="loginForm">
+      <label for="password">Пароль администратора</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <button type="submit">Войти</button>
+    </form>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="card">
+      <h2>Тексты сайта</h2>
+      <p class="muted">Здесь отображаются данные из базы. Измени JSON и нажми «Сохранить».</p>
+      <textarea id="contentEditor" spellcheck="false"></textarea>
+      <button id="saveContent">Сохранить тексты</button>
+      <button id="reloadContent" class="secondary">Загрузить заново</button>
+    </div>
+
+    <div class="card">
+      <h2>Добавить проект</h2>
+      <form id="projectForm">
+        <label for="title">Название проекта *</label>
+        <input id="title" maxlength="200" required>
+        <label for="description">Описание</label>
+        <textarea id="description" style="min-height:90px"></textarea>
+        <label for="media_url">Ссылка на изображение, видео или страницу</label>
+        <input id="media_url" type="url" placeholder="https://...">
+        <label for="media_type">Тип материала</label>
+        <select id="media_type">
+          <option value="image">Изображение</option>
+          <option value="video">Видео</option>
+          <option value="link">Ссылка</option>
+        </select>
+        <label for="sort_order">Порядок отображения</label>
+        <input id="sort_order" type="number" value="0">
+        <button type="submit">Добавить проект</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Проекты</h2>
+      <div id="projectsList">Загрузка...</div>
+    </div>
+
+    <button id="logout" class="secondary">Выйти из панели</button>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const message = text => { $("message").textContent = text; };
+
+async function api(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      ...(options.body ? {"Content-Type":"application/json"} : {}),
+      ...(options.headers || {})
+    },
+    credentials: "same-origin"
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || "Ошибка запроса: " + response.status);
+  return data;
+}
+
+function showDashboard() {
+  $("loginBox").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+}
+
+function showLogin() {
+  $("dashboard").classList.add("hidden");
+  $("loginBox").classList.remove("hidden");
+}
+
+async function checkLogin() {
+  try {
+    await api("/api/auth");
+    showDashboard();
+    await loadContent();
+  } catch {
+    showLogin();
+  }
+}
+
+async function loadContent() {
+  const data = await api("/api/content");
+  $("contentEditor").value = JSON.stringify(data.content || {}, null, 2);
+  renderProjects(data.projects || []);
+}
+
+async function refresh() {
+  try {
+    await loadContent();
+    message("Данные загружены.");
+  } catch (error) {
+    message(error.message);
+  }
+}
+
+function renderProjects(projects) {
+  const list = $("projectsList");
+  list.replaceChildren();
+
+  if (!projects.length) {
+    list.textContent = "Пока проектов нет.";
+    return;
+  }
+
+  projects.forEach(project => {
+    const item = document.createElement("div");
+    item.className = "project";
+
+    const heading = document.createElement("h3");
+    heading.textContent = project.title;
+    item.appendChild(heading);
+
+    const desc = document.createElement("p");
+    desc.textContent = project.description || "Без описания";
+    item.appendChild(desc);
+
+    const type = document.createElement("small");
+    type.textContent = "Тип: " + project.media_type +
+      " · Порядок: " + project.sort_order;
+    item.appendChild(type);
+
+    if (project.media_url) {
+      const link = document.createElement("p");
+      const anchor = document.createElement("a");
+      anchor.href = project.media_url;
+      anchor.textContent = "Открыть материал";
+      anchor.target = "_blank";
+      anchor.rel = "noopener noreferrer";
+      anchor.style.color = "#d7b56d";
+      link.appendChild(anchor);
+      item.appendChild(link);
+    }
+
+    const edit = document.createElement("button");
+    edit.className = "secondary";
+    edit.textContent = "Редактировать";
+    edit.addEventListener("click", async () => {
+      const title = prompt("Название проекта:", project.title);
+      if (title === null) return;
+      if (!title.trim()) {
+        message("Название не может быть пустым.");
+        return;
+      }
+      const description = prompt("Описание:", project.description || "");
+      if (description === null) return;
+      const media_url = prompt("Ссылка на материал:", project.media_url || "");
+      if (media_url === null) return;
+      const media_type = prompt("Тип: image, video или link", project.media_type);
+      if (media_type === null) return;
+      const sort_order = Number(prompt("Порядок отображения:", project.sort_order));
+      try {
+        await api("/api/content", {
+          method:"POST",
+          body:JSON.stringify({
+            action:"updateProject",
+            id:project.id,
+            title,
+            description,
+            media_url,
+            media_type,
+            sort_order:Number.isFinite(sort_order) ? sort_order : 0
+          })
+        });
+        message("Проект обновлён.");
+        await loadContent();
+      } catch (error) {
+        message(error.message);
+      }
+    });
+    item.appendChild(edit);
+
+    const del = document.createElement("button");
+    del.className = "danger";
+    del.textContent = "Удалить";
+    del.addEventListener("click", async () => {
+      if (!confirm("Удалить проект «" + project.title + "»?")) return;
+      try {
+        await api("/api/content", {
+          method:"POST",
+          body:JSON.stringify({action:"deleteProject",id:project.id})
+        });
+        message("Проект удалён.");
+        await loadContent();
+      } catch (error) {
+        message(error.message);
+      }
+    });
+    item.appendChild(del);
+    list.appendChild(item);
+  });
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  message("Проверяем пароль...");
+  try {
+    await api("/api/login", {
+      method:"POST",
+      body:JSON.stringify({password:$("password").value})
+    });
+    $("password").value = "";
+    showDashboard();
+    await loadContent();
+    message("Вход выполнен.");
+  } catch (error) {
+    message(error.message);
+  }
+});
+
+$("saveContent").addEventListener("click", async () => {
+  try {
+    const content = JSON.parse($("contentEditor").value);
+    if (!content || typeof content !== "object" || Array.isArray(content)) {
+      throw new Error("Нужен JSON-объект.");
+    }
+    await api("/api/content", {
+      method:"POST",
+      body:JSON.stringify({action:"saveContent",content})
+    });
+    message("Тексты сохранены в базе данных.");
+  } catch (error) {
+    message("Не удалось сохранить: " + error.message);
+  }
+});
+
+$("reloadContent").addEventListener("click", refresh);
+
+$("projectForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  try {
+    await api("/api/content", {
+      method:"POST",
+      body:JSON.stringify({
+        action:"addProject",
+        title:$("title").value,
+        description:$("description").value,
+        media_url:$("media_url").value,
+        media_type:$("media_type").value,
+        sort_order:Number($("sort_order").value) || 0
+      })
+    });
+    $("projectForm").reset();
+    $("sort_order").value = "0";
+    message("Проект добавлен.");
+    await loadContent();
+  } catch (error) {
+    message(error.message);
+  }
+});
+
+$("logout").addEventListener("click", async () => {
+  try {
+    await api("/api/logout", {method:"POST"});
+  } finally {
+    showLogin();
+    message("Вы вышли из панели.");
+  }
+});
+
+checkLogin();
+</script>
+</body>
+</html>
