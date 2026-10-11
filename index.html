@@ -250,3 +250,65 @@
   </script>
 </body>
 </html>
+<!-- GRStudio Admin Panel -->
+<section id="admin-panel" style="display:none;max-width:800px;margin:40px auto;padding:24px;background:#131316;color:#f5f4f0;border:1px solid #333;border-radius:16px;font-family:Arial,sans-serif">
+  <h2 style="color:#d5ff62">GRStudio — Панель управления</h2>
+  <p>Измени информацию и сохрани её на этом устройстве.</p>
+
+  <label>Заголовок сайта</label>
+  <input id="admin-title" style="display:block;width:100%;box-sizing:border-box;padding:12px;margin:8px 0 18px">
+
+  <label>Описание сайта</label>
+  <textarea id="admin-description" style="display:block;width:100%;box-sizing:border-box;min-height:100px;padding:12px;margin:8px 0 18px"></textarea>
+
+  <label>Текст кнопки</label>
+  <input id="admin-button" style="display:block;width:100%;box-sizing:border-box;padding:12px;margin:8px 0 18px">
+
+  <label>Контактная ссылка (Telegram, email или другой адрес)</label>
+  <input id="admin-contact" placeholder="https://t.me/username" style="display:block;width:100%;box-sizing:border-box;padding:12px;margin:8px 0 18px">
+
+  <button onclick="saveGRSettings()" style="padding:14px 22px;background:#d5ff62;border:0;border-radius:30px;font-weight:bold">
+    Сохранить изменения
+  </button>
+  <p id="admin-status"></p>
+</section>
+
+<script>
+function loadGRSettings() {
+  const fields = {
+    'admin-title': 'gr-title',
+    'admin-description': 'gr-description',
+    'admin-button': 'gr-button',
+    'admin-contact': 'gr-contact'
+  };
+
+  Object.keys(fields).forEach(id => {
+    document.getElementById(id).value =
+      localStorage.getItem(fields[id]) || '';
+  });
+}
+
+function saveGRSettings() {
+  const fields = {
+    'admin-title': 'gr-title',
+    'admin-description': 'gr-description',
+    'admin-button': 'gr-button',
+    'admin-contact': 'gr-contact'
+  };
+
+  Object.keys(fields).forEach(id => {
+    localStorage.setItem(
+      fields[id],
+      document.getElementById(id).value
+    );
+  });
+
+  document.getElementById('admin-status').textContent =
+    'Изменения сохранены на этом устройстве.';
+}
+
+if (location.hash === '#admin') {
+  document.getElementById('admin-panel').style.display = 'block';
+  loadGRSettings();
+}
+</script>
