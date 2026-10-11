@@ -1,104 +1,46 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GRStudio</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08090d">
+<meta name="description" content="GRStudio — фото, видео и визуальные истории"><title>GRStudio — Visual Studio</title>
 <style>
-body{margin:0;background:#0b0b0d;color:#f5f4f0;font-family:Arial,sans-serif}
-header,section,footer{padding:24px;max-width:1000px;margin:auto}
-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #333}
-h1,h2{color:#d6ff62}
-a,button{color:#111;background:#d6ff62;padding:12px 18px;border:0;border-radius:25px;display:inline-block;text-decoration:none;cursor:pointer}
-input,textarea{display:block;width:100%;padding:12px;margin:8px 0 18px;box-sizing:border-box}
-.card{background:#151518;padding:22px;margin:16px 0;border:1px solid #333;border-radius:16px}
-#admin{display:none}
-</style>
-</head>
-<body>
-<header>
-<strong>GRStudio.</strong>
-<a href="#contact">Обсудить проект</a>
-</header>
-
-<section id="home">
-<p>НЕЗАВИСИМАЯ DIGITAL-СТУДИЯ</p>
-<h1 id="heading">Идеи. Дизайн. GRStudio.</h1>
-<p id="description">Создаю цифровые впечатления, в которых сочетаются характер, эстетика и внимание к деталям.</p>
-<a href="#work">Смотреть работы</a>
-</section>
-
-<section id="work">
-<h2>Работы и эксперименты</h2>
-<div class="card"><h3>Visual Identity</h3><p>Айдентика и арт-дирекшн</p></div>
-<div class="card"><h3>Digital Experience</h3><p>Цифровая эстетика и UI</p></div>
-<div class="card"><h3>Minimal Objects</h3><p>Минимализм и композиция</p></div>
-</section>
-
-<section id="about">
-<h2>Обо мне</h2>
-<p>GRStudio — творческое пространство для сильных визуальных решений и цифровых проектов.</p>
-</section>
-
-<section id="contact">
-<h2>Контакты</h2>
-<a id="contact-link" href="mailto:hello@example.com">Написать на почту</a>
-</section>
-
-<section id="admin">
-<h2>Панель управления</h2>
-<label>Заголовок</label>
-<input id="edit-heading">
-<label>Описание</label>
-<textarea id="edit-description"></textarea>
-<label>Email или ссылка</label>
-<input id="edit-contact">
-<button onclick="saveSettings()">Сохранить</button>
-<p id="status"></p>
-</section>
-
-<footer>© <span id="year"></span> GRStudio</footer>
-
+:root{--bg:#08090d;--panel:#11131a;--panel2:#171923;--line:#292c37;--text:#f4f4f6;--muted:#a0a4b2;--lime:#c4ff65}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 76% -20%,#31294a 0,transparent 48%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}.wrap{width:min(1120px,calc(100% - 40px));margin:auto}.nav{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff13}.logo{font-weight:900;letter-spacing:.16em}.logo span{color:var(--lime)}.navlinks{display:flex;gap:24px;color:var(--muted);font-size:14px}.navlinks a:hover{color:white}.hero{padding:100px 0 90px;min-height:530px;display:flex;flex-direction:column;justify-content:center}.eyebrow{color:var(--lime);font-size:11px;letter-spacing:.23em;text-transform:uppercase}.hero h1{font-size:clamp(42px,8vw,94px);line-height:.98;letter-spacing:-.065em;max-width:930px;margin:22px 0}.hero p{color:var(--muted);font-size:clamp(16px,2vw,20px);line-height:1.7;max-width:620px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.btn{border:1px solid var(--line);border-radius:999px;padding:13px 20px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;background:transparent;color:var(--text)}.btn.primary{background:var(--lime);color:#11150a;border-color:var(--lime);font-weight:800}.section{padding:70px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:28px}.section h2{font-size:clamp(29px,5vw,46px);letter-spacing:-.04em;margin:8px 0}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.project{border:1px solid var(--line);background:var(--panel);border-radius:18px;overflow:hidden;transition:transform .25s,border-color .25s}.project:hover{transform:translateY(-4px);border-color:#555a6b}.media{aspect-ratio:4/3;background:#1c1f2a;display:flex;align-items:center;justify-content:center;overflow:hidden}.media img,.media video{width:100%;height:100%;object-fit:cover}.link-media{font-size:40px;color:var(--lime)}.project-info{padding:16px}.project-info h3{margin:0 0 7px}.project-info p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}.project-info .outlink{display:inline-block;margin-top:12px;color:var(--lime);font-size:13px}.aboutbox{border:1px solid var(--line);background:linear-gradient(120deg,#171925,#0f1118);padding:clamp(24px,5vw,48px);border-radius:24px;line-height:1.8;color:#d6d7df;white-space:pre-wrap}.contact{border-top:1px solid var(--line);padding:48px 0 70px}.contact-row{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}.footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.admin-page{display:none;padding:40px 0 80px}.admin-card{border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:22px;margin:18px 0}.field{display:flex;flex-direction:column;gap:7px;margin:12px 0}.field label{font-size:13px;color:var(--muted)}input,textarea{width:100%;background:#0b0c12;color:white;border:1px solid var(--line);border-radius:10px;padding:12px}textarea{min-height:100px;resize:vertical}.admin-list{display:grid;gap:10px}.admin-item{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);padding:12px;border-radius:12px}.status{font-size:13px;color:var(--lime);min-height:20px}.hidden{display:none!important}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button.active{border-color:var(--lime);color:var(--lime)}.small{font-size:12px}.danger{border-color:#784444;color:#ffb5b5}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:75px 0}.navlinks{gap:12px}.formgrid{grid-template-columns:1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr}.wrap{width:calc(100% - 28px)}.nav{height:68px}.navlinks{gap:10px;font-size:12px}.hero{min-height:460px}}
+</style></head><body>
+<header class="wrap nav"><a class="logo" href="/">GR<span>STUDIO</span></a><nav class="navlinks"><a href="/#work">Работы</a><a href="/#about">О студии</a><a href="/#contact">Контакты</a><a href="/admin">Админ</a></nav></header>
+<main id="public-site">
+<section class="wrap hero"><div class="eyebrow">Independent visual studio</div><h1 id="headline">Создаём визуальные истории</h1><p id="subheadline">Фото, видео и цифровой контент для брендов и людей.</p><div class="actions"><a class="btn primary" href="#work">Смотреть работы ↗</a><a class="btn" href="#contact">Обсудить проект</a></div></section>
+<section class="wrap section" id="work"><div class="section-head"><div><div class="eyebrow">Selected projects</div><h2>Избранные работы</h2></div><span class="muted">Портфолио GRStudio</span></div><div id="projects" class="grid"><p class="muted">Загрузка портфолио…</p></div></section>
+<section class="wrap section" id="about"><div class="eyebrow">Who we are</div><h2>О студии</h2><div class="aboutbox" id="about-text">GRStudio — студия визуального контента.</div></section>
+<section class="contact" id="contact"><div class="wrap contact-row"><div><div class="eyebrow">Let's talk</div><h2>Есть идея? Давайте создадим.</h2><div class="muted" id="contact-text">hello@grstudio.example</div></div><a class="btn primary" id="contact-link" href="mailto:hello@grstudio.example">Связаться ↗</a></div></section>
+</main>
+<section class="wrap admin-page" id="admin-app"><div class="eyebrow">Private workspace</div><h1>Админ-панель GRStudio</h1><p class="muted">Изменения сохраняются в облаке и доступны всем посетителям сайта.</p>
+<div class="admin-card" id="login-card"><h2>Вход администратора</h2><form id="login-form"><div class="field"><label>Пароль администратора</label><input id="password" type="password" autocomplete="current-password" required></div><button class="btn primary" type="submit">Войти</button><p class="status" id="login-status"></p></form></div>
+<div id="dashboard" class="hidden">
+<div class="admin-card"><div class="section-head"><h2>Тексты сайта</h2><button class="btn" id="logout">Выйти</button></div><form id="content-form"><div class="field"><label>Главный заголовок</label><input name="headline" required maxlength="250"></div><div class="field"><label>Подзаголовок</label><textarea name="subheadline" maxlength="1000"></textarea></div><div class="field"><label>О студии</label><textarea name="about" maxlength="4000"></textarea></div><div class="field"><label>Контакт (email или текст)</label><input name="contact" maxlength="250"></div><button class="btn primary" type="submit">Сохранить тексты</button><p class="status" id="content-status"></p></form></div>
+<div class="admin-card"><h2>Добавить работу</h2><div class="tabs"><button class="btn active" type="button" data-mode="media">Фото / видео</button><button class="btn" type="button" data-mode="link">Ссылка на проект</button></div>
+<form id="media-form"><div class="field"><label>Название</label><input name="title" required maxlength="160"></div><div class="field"><label>Описание</label><input name="description" maxlength="500"></div><div class="field"><label>Фото или видео, до 25 МБ</label><input name="media" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm" required></div><button class="btn primary" type="submit">Загрузить работу</button><p class="status" id="media-status"></p></form>
+<form id="link-form" class="hidden"><div class="field"><label>Название проекта</label><input name="title" required maxlength="160"></div><div class="field"><label>Описание</label><input name="description" maxlength="500"></div><div class="field"><label>Внешняя ссылка (https://...)</label><input name="external_url" type="url" required placeholder="https://example.com"></div><button class="btn primary" type="submit">Добавить ссылку</button><p class="status" id="link-status"></p></form></div>
+<div class="admin-card"><h2>Портфолио</h2><div id="admin-projects" class="admin-list"></div></div>
+</div></section><footer class="wrap footer"><span>© <span id="year"></span> GRStudio</span><span>Made with intention.</span></footer>
 <script>
+const isAdmin=location.pathname.replace(/\\/$/,'')==='/admin';
+const pub=document.getElementById('public-site'), admin=document.getElementById('admin-app');
+if(isAdmin){pub.classList.add('hidden');admin.style.display='block';}
 document.getElementById('year').textContent=new Date().getFullYear();
-
-function loadSettings(){
-  try{
-    const s=JSON.parse(localStorage.getItem('grstudio-settings')||'{}');
-    if(s.heading)document.getElementById('heading').textContent=s.heading;
-    if(s.description)document.getElementById('description').textContent=s.description;
-    if(s.contact)document.getElementById('contact-link').href=s.contact;
-  }catch(e){}
-}
-
-function saveSettings(){
-  const s={
-    heading:document.getElementById('edit-heading').value.trim(),
-    description:document.getElementById('edit-description').value.trim(),
-    contact:document.getElementById('edit-contact').value.trim()
-  };
-  try{
-    localStorage.setItem('grstudio-settings',JSON.stringify(s));
-    loadSettings();
-    document.getElementById('status').textContent='Сохранено в этом браузере.';
-  }catch(e){
-    document.getElementById('status').textContent='Не удалось сохранить.';
-  }
-}
-
-function openAdmin(){
-  if(location.hash==='#admin'){
-    document.getElementById('admin').style.display='block';
-    document.getElementById('edit-heading').value=document.getElementById('heading').textContent;
-    document.getElementById('edit-description').value=document.getElementById('description').textContent;
-    document.getElementById('edit-contact').value=document.getElementById('contact-link').getAttribute('href');
-  }
-}
-
-loadSettings();
-openAdmin();
-window.addEventListener('hashchange',openAdmin);
-</script>
-</body>
-</html>
+async function api(url,options={}){const r=await fetch(url,{credentials:'same-origin',...options});let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||'Ошибка запроса ('+r.status+')');return d;}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function cardMedia(p){if(p.kind==='link')return '<div class="link-media">↗</div>';const u='/api/media/'+encodeURIComponent(p.media_key.replace(/^projects\\//,''));return p.kind==='video'?`<video src="${u}" controls preload="metadata"></video>`:`<img src="${u}" alt="${esc(p.title)}" loading="lazy">`;}
+async function loadPublic(){try{const d=await api('/api/content');for(const k of ['headline','subheadline'])document.getElementById(k).textContent=d[k]||'';document.getElementById('about-text').textContent=d.about||'';document.getElementById('contact-text').textContent=d.contact||'';const c=(d.contact||'').trim();document.getElementById('contact-link').href=/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(c)?'mailto:'+c:'#contact';}catch(e){}
+try{const d=await api('/api/projects');document.getElementById('projects').innerHTML=(d.projects||[]).map(p=>`<article class="project"><div class="media">${cardMedia(p)}</div><div class="project-info"><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p>${p.kind==='link'?`<a class="outlink" href="${esc(p.external_url)}" target="_blank" rel="noopener noreferrer">Открыть проект ↗</a>`:''}</div></article>`).join('')||'<p class="muted">Работы скоро появятся.</p>';}catch(e){document.getElementById('projects').innerHTML='<p class="muted">Портфолио временно недоступно. Проверьте настройки базы.</p>';}}
+async function loadDashboard(){const d=await api('/api/content'),f=document.getElementById('content-form');['headline','subheadline','about','contact'].forEach(k=>f.elements[k].value=d[k]||'');const {projects}=await api('/api/projects');document.getElementById('admin-projects').innerHTML=projects.length?projects.map(p=>`<div class="admin-item"><span><b>${esc(p.title)}</b><br><small class="muted">${esc(p.kind)} · ${esc(p.description)}</small></span><button class="btn danger" data-delete="${esc(p.id)}">Удалить</button></div>`).join(''):'<p class="muted">Пока нет работ.</p>';document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=async()=>{if(!confirm('Удалить эту работу?'))return;try{await api('/api/projects/'+encodeURIComponent(b.dataset.delete),{method:'DELETE'});await loadDashboard();}catch(e){alert(e.message)}});}
+document.getElementById('login-form').onsubmit=async e=>{e.preventDefault();const s=document.getElementById('login-status');s.textContent='Проверяем…';try{await api('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.getElementById('password').value})});document.getElementById('login-card').classList.add('hidden');document.getElementById('dashboard').classList.remove('hidden');await loadDashboard();}catch(err){s.textContent=err.message;}};
+document.getElementById('logout').onclick=async()=>{try{await api('/api/auth/logout',{method:'POST'});}finally{location.reload();}};
+document.getElementById('content-form').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,s=document.getElementById('content-status'),body={};['headline','subheadline','about','contact'].forEach(k=>body[k]=f.elements[k].value);s.textContent='Сохраняем…';try{await api('/api/content',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});s.textContent='Сохранено!';}catch(err){s.textContent=err.message;}};
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('active',x===b));document.getElementById('media-form').classList.toggle('hidden',b.dataset.mode!=='media');document.getElementById('link-form').classList.toggle('hidden',b.dataset.mode!=='link');});
+document.getElementById('media-form').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,s=document.getElementById('media-status'),file=f.elements.media.files[0];if(!file)return;if(file.size>25*1024*1024){s.textContent='Файл больше 25 МБ.';return;}const fd=new FormData();fd.append('title',f.elements.title.value);fd.append('description',f.elements.description.value);fd.append('media',file);s.textContent='Загружаем…';try{await api('/api/projects',{method:'POST',body:fd});f.reset();s.textContent='Добавлено!';await loadDashboard();}catch(err){s.textContent=err.message;}};
+document.getElementById('link-form').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,s=document.getElementById('link-status');s.textContent='Добавляем…';try{await api('/api/projects',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:f.elements.title.value,description:f.elements.description.value,external_url:f.elements.external_url.value})});f.reset();s.textContent='Ссылка добавлена!';await loadDashboard();}catch(err){s.textContent=err.message;}};
+loadPublic();
+if(isAdmin){api('/api/auth/me').then(d=>{if(d.authenticated){document.getElementById('login-card').classList.add('hidden');document.getElementById('dashboard').classList.remove('hidden');return loadDashboard();}}).catch(()=>{});}
+</script></body></html>
